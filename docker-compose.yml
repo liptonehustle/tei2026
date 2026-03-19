@@ -1,0 +1,102 @@
+version: "3.9"
+
+# =============================================================
+# AI Trading Platform — Docker Compose
+# Phase 1: Core infrastructure
+# Services: PostgreSQL, Redis, pgAdmin, RedisInsight
+# =============================================================
+
+services:
+
+  # -----------------------------------------------------------
+  # PostgreSQL — main database for all market/trading data
+  # -----------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: trading_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/migrations:/docker-entrypoint-initdb.d   # auto-runs on first start
+    ports:
+      - "5433:5432"
+    networks:
+      - trading_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # -----------------------------------------------------------
+  # Redis — message queue between pipeline services
+  # -----------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: trading_redis
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD} --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - trading_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # -----------------------------------------------------------
+  # pgAdmin — web UI to inspect PostgreSQL
+  # Access: http://localhost:5050
+  # -----------------------------------------------------------
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: trading_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "5050:80"
+    networks:
+      - trading_net
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # -----------------------------------------------------------
+  # RedisInsight — web UI to inspect Redis queues
+  # Access: http://localhost:8001
+  # -----------------------------------------------------------
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: trading_redisinsight
+    restart: unless-stopped
+    ports:
+      - "8001:5540"
+    networks:
+      - trading_net
+    depends_on:
+      redis:
+        condition: service_healthy
+
+# -----------------------------------------------------------
+# Volumes — persistent storage
+# -----------------------------------------------------------
+volumes:
+  postgres_data:
+  redis_data:
+
+# -----------------------------------------------------------
+# Network — isolated bridge network for all services
+# -----------------------------------------------------------
+networks:
+  trading_net:
+    driver: bridge

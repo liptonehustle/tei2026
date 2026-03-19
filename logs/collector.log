@@ -1,0 +1,178 @@
+2026-03-19 12:47:49.709 | ERROR    | database.db:test_connection:61 - PostgreSQL FAILED: could not translate host name "2026@localhost" to address: Non-recoverable failure in name resolution
+
+2026-03-19 12:47:49.709 | ERROR    | __main__:<module>:132 - PostgreSQL not reachable. Is Docker running?
+2026-03-19 12:50:09.040 | ERROR    | database.db:test_connection:61 - PostgreSQL FAILED: could not translate host name "2026@localhost" to address: Non-recoverable failure in name resolution
+
+2026-03-19 12:50:09.041 | ERROR    | __main__:<module>:132 - PostgreSQL not reachable. Is Docker running?
+2026-03-19 12:51:48.972 | INFO     | database.db:get_pool:30 - PostgreSQL connection pool created (min=1, max=10)
+2026-03-19 12:51:48.976 | INFO     | database.db:test_connection:65 - PostgreSQL OK
+2026-03-19 12:51:48.977 | INFO     | __main__:backfill:112 - Backfill: BTC/USDT | last 30 days | timeframe: 1m
+2026-03-19 12:51:48.977 | INFO     | __main__:backfill:113 -   From: 2026-02-17 05:51:48.977000+00:00
+2026-03-19 12:51:48.977 | INFO     | __main__:backfill:114 -   To:   2026-03-19 05:51:48.976000+00:00
+2026-03-19 12:51:48.985 | INFO     | data_ingestion.collector:get_exchange:63 - Exchange ready: binance | symbols: ['BTC/USDT', 'ETH/USDT', 'BNB/USDT'] | timeframe: 1m
+2026-03-19 12:51:48.985 | INFO     | __main__:fetch_historical:59 - Backfilling BTC/USDT | 1m | ~43199 candles expected
+2026-03-19 12:51:49.483 | ERROR    | __main__:fetch_historical:75 - Fetch error at 1771307508977: binance GET https://api.binance.com/api/v3/exchangeInfo
+2026-03-19 12:51:49.484 | SUCCESS  | __main__:backfill:118 - Backfill complete: 0 candles saved for BTC/USDT
+2026-03-19 13:21:50.508 | INFO     | database.db:get_pool:30 - PostgreSQL connection pool created (min=1, max=10)
+2026-03-19 13:21:50.522 | INFO     | database.db:test_connection:65 - PostgreSQL OK
+2026-03-19 13:21:50.522 | INFO     | __main__:backfill:95 - =======================================================
+2026-03-19 13:21:50.523 | INFO     | __main__:backfill:96 - Backfill: BTC/USDT | last 30 days | timeframe: 1m
+2026-03-19 13:21:50.523 | INFO     | __main__:backfill:97 - From : 2026-02-17 06:21 UTC
+2026-03-19 13:21:50.523 | INFO     | __main__:backfill:98 - To   : 2026-03-19 06:21 UTC
+2026-03-19 13:21:50.523 | INFO     | __main__:backfill:99 - =======================================================
+2026-03-19 13:21:50.530 | INFO     | data_ingestion.collector:get_exchange:55 - Exchange ready: bybit | symbols: ['BTC/USDT', 'ETH/USDT', 'BNB/USDT'] | timeframe: 1m
+2026-03-19 13:21:50.531 | INFO     | __main__:fetch_historical:41 - Backfilling BTC/USDT | 1m | ~43,200 candles expected
+2026-03-19 13:21:50.873 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot — retrying in 5s
+2026-03-19 13:21:56.212 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot — retrying in 5s
+2026-03-19 13:22:01.565 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot — retrying in 5s
+2026-03-19 13:22:06.937 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot — retrying in 5s
+2026-03-19 13:22:12.298 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot — retrying in 5s
+2026-03-19 13:22:36.624 | INFO     | database.db:get_pool:30 - PostgreSQL connection pool created (min=1, max=10)
+2026-03-19 13:22:36.628 | INFO     | database.db:test_connection:65 - PostgreSQL OK
+2026-03-19 13:22:36.629 | INFO     | __main__:backfill:95 - =======================================================
+2026-03-19 13:22:36.629 | INFO     | __main__:backfill:96 - Backfill: BTC/USDT | last 30 days | timeframe: 1m
+2026-03-19 13:22:36.629 | INFO     | __main__:backfill:97 - From : 2026-02-17 06:22 UTC
+2026-03-19 13:22:36.629 | INFO     | __main__:backfill:98 - To   : 2026-03-19 06:22 UTC
+2026-03-19 13:22:36.629 | INFO     | __main__:backfill:99 - =======================================================
+2026-03-19 13:22:36.637 | INFO     | data_ingestion.collector:get_exchange:55 - Exchange ready: bybit | symbols: ['BTC/USDT', 'ETH/USDT', 'BNB/USDT'] | timeframe: 1m
+2026-03-19 13:22:36.637 | INFO     | __main__:fetch_historical:41 - Backfilling BTC/USDT | 1m | ~43,200 candles expected
+2026-03-19 13:27:55.672 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=BTCUSDT&start=1772216760001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 13:29:07.979 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=BTCUSDT&start=1772336160001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 13:31:54.404 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=BTCUSDT&start=1772336160001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 13:31:59.730 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=BTCUSDT&start=1772336160001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 13:32:05.040 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=BTCUSDT&start=1772336160001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 13:32:10.399 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=BTCUSDT&start=1772336160001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 13:32:15.764 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=BTCUSDT&start=1772336160001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 13:32:20.768 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=BTCUSDT&start=1772336160001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 13:40:40.797 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=BTCUSDT&start=1773757020001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 13:41:49.570 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=BTCUSDT&start=1773888360001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 13:42:07.861 | SUCCESS  | __main__:backfill:103 - ✅ Backfill complete: 43,200 candles saved for BTC/USDT
+2026-03-19 13:58:28.238 | INFO     | __main__:<module>:126 - =======================================================
+2026-03-19 13:58:28.239 | INFO     | __main__:<module>:127 - Phase 2 — Data Collector Verification
+2026-03-19 13:58:28.239 | INFO     | __main__:<module>:128 - =======================================================
+2026-03-19 13:58:28.240 | INFO     | __main__:check_row_counts:27 - ── Row counts ──────────────────────────────────
+2026-03-19 13:58:28.294 | INFO     | database.db:get_pool:30 - PostgreSQL connection pool created (min=1, max=10)
+2026-03-19 13:58:28.355 | INFO     | __main__:check_row_counts:47 -   BTC/USDT [1m] | 43,200 rows | latest: 36 min ago
+2026-03-19 13:58:28.355 | INFO     | __main__:check_gaps:53 - ── Gap check (last 60 candles) ─────────────────
+2026-03-19 13:58:28.374 | INFO     | __main__:check_gaps:79 -   ✅ BTC/USDT | no gaps detected in last 60 candles
+2026-03-19 13:58:28.375 | INFO     | __main__:check_redis_queue:84 - ── Redis queue ─────────────────────────────────
+2026-03-19 13:58:28.390 | INFO     | __main__:check_redis_queue:88 -   raw:market_data queue depth: 0 items
+2026-03-19 13:58:28.391 | WARNING  | __main__:check_redis_queue:90 -   Queue is empty — collector may not be running yet (OK if just started)
+2026-03-19 13:58:28.392 | INFO     | __main__:check_freshness:102 - ── Freshness check ─────────────────────────────
+2026-03-19 13:58:28.413 | WARNING  | __main__:check_freshness:118 -   ⚠️  BTC/USDT | STALE — last candle was 36 min ago
+2026-03-19 13:58:28.414 | INFO     | __main__:<module>:137 - =======================================================
+2026-03-19 13:58:28.414 | WARNING  | __main__:<module>:143 - Some checks need attention: ['Freshness']
+2026-03-19 13:58:28.415 | INFO     | __main__:<module>:144 - This may be normal if the collector just started. Re-run in 2 minutes.
+2026-03-19 13:59:31.982 | INFO     | database.db:get_pool:30 - PostgreSQL connection pool created (min=1, max=10)
+2026-03-19 13:59:31.988 | INFO     | database.db:test_connection:65 - PostgreSQL OK
+2026-03-19 13:59:31.989 | INFO     | __main__:backfill:95 - =======================================================
+2026-03-19 13:59:31.989 | INFO     | __main__:backfill:96 - Backfill: ETH/USDT | last 30 days | timeframe: 1m
+2026-03-19 13:59:31.990 | INFO     | __main__:backfill:97 - From : 2026-02-17 06:59 UTC
+2026-03-19 13:59:31.990 | INFO     | __main__:backfill:98 - To   : 2026-03-19 06:59 UTC
+2026-03-19 13:59:31.990 | INFO     | __main__:backfill:99 - =======================================================
+2026-03-19 13:59:31.999 | INFO     | data_ingestion.collector:get_exchange:55 - Exchange ready: bybit | symbols: ['BTC/USDT', 'ETH/USDT', 'BNB/USDT'] | timeframe: 1m
+2026-03-19 13:59:32.000 | INFO     | __main__:fetch_historical:41 - Backfilling ETH/USDT | 1m | ~43,200 candles expected
+2026-03-19 13:59:54.180 | INFO     | database.db:get_pool:30 - PostgreSQL connection pool created (min=1, max=10)
+2026-03-19 13:59:54.190 | INFO     | database.db:test_connection:65 - PostgreSQL OK
+2026-03-19 13:59:54.192 | INFO     | __main__:backfill:95 - =======================================================
+2026-03-19 13:59:54.193 | INFO     | __main__:backfill:96 - Backfill: ETH/USDT | last 30 days | timeframe: 1m
+2026-03-19 13:59:54.195 | INFO     | __main__:backfill:97 - From : 2026-02-17 06:59 UTC
+2026-03-19 13:59:54.196 | INFO     | __main__:backfill:98 - To   : 2026-03-19 06:59 UTC
+2026-03-19 13:59:54.198 | INFO     | __main__:backfill:99 - =======================================================
+2026-03-19 13:59:54.214 | INFO     | data_ingestion.collector:get_exchange:55 - Exchange ready: bybit | symbols: ['BTC/USDT', 'ETH/USDT', 'BNB/USDT'] | timeframe: 1m
+2026-03-19 13:59:54.216 | INFO     | __main__:fetch_historical:41 - Backfilling ETH/USDT | 1m | ~43,200 candles expected
+2026-03-19 14:08:43.072 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=ETHUSDT&start=1772815980001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 14:09:46.803 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=ETHUSDT&start=1772863740001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 14:14:21.586 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=ETHUSDT&start=1773627900001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 14:14:41.642 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=ETHUSDT&start=1773627900001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 14:16:01.406 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=ETHUSDT&start=1773747300001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 14:16:23.008 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=ETHUSDT&start=1773747300001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 14:16:46.875 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=ETHUSDT&start=1773759240001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 14:17:45.879 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=ETHUSDT&start=1773842820001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 14:18:23.087 | SUCCESS  | __main__:backfill:103 - ✅ Backfill complete: 43,200 candles saved for ETH/USDT
+2026-03-19 14:36:04.545 | INFO     | database.db:get_pool:30 - PostgreSQL connection pool created (min=1, max=10)
+2026-03-19 14:36:04.571 | INFO     | database.db:test_connection:65 - PostgreSQL OK
+2026-03-19 14:36:04.571 | INFO     | __main__:backfill:95 - =======================================================
+2026-03-19 14:36:04.572 | INFO     | __main__:backfill:96 - Backfill: BNB/USDT | last 30 days | timeframe: 1m
+2026-03-19 14:36:04.573 | INFO     | __main__:backfill:97 - From : 2026-02-17 07:36 UTC
+2026-03-19 14:36:04.574 | INFO     | __main__:backfill:98 - To   : 2026-03-19 07:36 UTC
+2026-03-19 14:36:04.574 | INFO     | __main__:backfill:99 - =======================================================
+2026-03-19 14:36:04.584 | INFO     | data_ingestion.collector:get_exchange:55 - Exchange ready: bybit | symbols: ['BTC/USDT', 'ETH/USDT', 'BNB/USDT'] | timeframe: 1m
+2026-03-19 14:36:04.585 | INFO     | __main__:fetch_historical:41 - Backfilling BNB/USDT | 1m | ~43,200 candles expected
+2026-03-19 14:39:18.285 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=BNBUSDT&start=1771671960001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 14:45:42.925 | ERROR    | __main__:fetch_historical:57 - Network error: bybit GET https://api.bybit.com/v5/market/kline?symbol=BNBUSDT&start=1772842080001&limit=200&interval=1&category=spot — retrying in 5s
+2026-03-19 14:52:09.524 | SUCCESS  | __main__:backfill:103 - ✅ Backfill complete: 43,200 candles saved for BNB/USDT
+2026-03-19 14:56:22.462 | INFO     | __main__:<module>:67 - =======================================================
+2026-03-19 14:56:22.463 | INFO     | __main__:<module>:68 - Data Collector Scheduler — Phase 2
+2026-03-19 14:56:22.463 | INFO     | __main__:<module>:69 - =======================================================
+2026-03-19 14:56:22.501 | INFO     | database.db:get_pool:30 - PostgreSQL connection pool created (min=1, max=10)
+2026-03-19 14:56:22.506 | INFO     | database.db:test_connection:65 - PostgreSQL OK
+2026-03-19 14:56:22.512 | INFO     | __main__:<module>:86 - Scheduler started. Collecting every 1 minute. Press Ctrl+C to stop.
+2026-03-19 14:56:22.513 | INFO     | __main__:<module>:87 - Watching symbols: ['BTC/USDT', 'ETH/USDT', 'BNB/USDT']
+2026-03-19 14:56:22.513 | INFO     | __main__:<module>:90 - Running initial collection now...
+2026-03-19 14:56:22.523 | INFO     | data_ingestion.collector:get_exchange:55 - Exchange ready: bybit | symbols: ['BTC/USDT', 'ETH/USDT', 'BNB/USDT'] | timeframe: 1m
+2026-03-19 14:56:46.783 | INFO     | __main__:shutdown:59 - Shutdown signal received — stopping scheduler...
+2026-03-19 14:56:46.786 | ERROR    | data_ingestion.collector:fetch_candle:84 - [BTC/USDT] Unexpected error: Scheduler is not running
+2026-03-19 14:57:16.439 | INFO     | __main__:<module>:67 - =======================================================
+2026-03-19 14:57:16.440 | INFO     | __main__:<module>:68 - Data Collector Scheduler — Phase 2
+2026-03-19 14:57:16.440 | INFO     | __main__:<module>:69 - =======================================================
+2026-03-19 14:57:16.495 | INFO     | database.db:get_pool:30 - PostgreSQL connection pool created (min=1, max=10)
+2026-03-19 14:57:16.500 | INFO     | database.db:test_connection:65 - PostgreSQL OK
+2026-03-19 14:57:16.504 | INFO     | __main__:<module>:86 - Scheduler started. Collecting every 1 minute. Press Ctrl+C to stop.
+2026-03-19 14:57:16.505 | INFO     | __main__:<module>:87 - Watching symbols: ['BTC/USDT', 'ETH/USDT', 'BNB/USDT']
+2026-03-19 14:57:16.505 | INFO     | __main__:<module>:90 - Running initial collection now...
+2026-03-19 14:57:16.514 | INFO     | data_ingestion.collector:get_exchange:55 - Exchange ready: bybit | symbols: ['BTC/USDT', 'ETH/USDT', 'BNB/USDT'] | timeframe: 1m
+2026-03-19 14:58:03.573 | INFO     | data_ingestion.collector:run_once:131 - ✅ BTC/USDT | 07:57 | close=70,241.9000 | vol=16.11
+2026-03-19 14:58:04.534 | INFO     | data_ingestion.collector:run_once:131 - ✅ ETH/USDT | 07:57 | close=2,168.5300 | vol=140.50
+2026-03-19 14:58:05.486 | INFO     | data_ingestion.collector:run_once:131 - ✅ BNB/USDT | 07:57 | close=645.5000 | vol=0.38
+2026-03-19 14:58:05.487 | INFO     | data_ingestion.collector:run_once:139 - Round done: 3/3 symbols OK
+2026-03-19 14:58:16.523 | INFO     | data_ingestion.collector:get_exchange:55 - Exchange ready: bybit | symbols: ['BTC/USDT', 'ETH/USDT', 'BNB/USDT'] | timeframe: 1m
+2026-03-19 14:58:36.132 | INFO     | __main__:<module>:126 - =======================================================
+2026-03-19 14:58:36.133 | INFO     | __main__:<module>:127 - Phase 2 — Data Collector Verification
+2026-03-19 14:58:36.134 | INFO     | __main__:<module>:128 - =======================================================
+2026-03-19 14:58:36.134 | INFO     | __main__:check_row_counts:27 - ── Row counts ──────────────────────────────────
+2026-03-19 14:58:36.185 | INFO     | database.db:get_pool:30 - PostgreSQL connection pool created (min=1, max=10)
+2026-03-19 14:58:36.272 | INFO     | __main__:check_row_counts:47 -   BNB/USDT [1m] | 43,201 rows | latest: 1 min ago
+2026-03-19 14:58:36.272 | INFO     | __main__:check_row_counts:47 -   BTC/USDT [1m] | 43,201 rows | latest: 1 min ago
+2026-03-19 14:58:36.273 | INFO     | __main__:check_row_counts:47 -   ETH/USDT [1m] | 43,201 rows | latest: 1 min ago
+2026-03-19 14:58:36.274 | INFO     | __main__:check_gaps:53 - ── Gap check (last 60 candles) ─────────────────
+2026-03-19 14:58:36.289 | INFO     | __main__:check_gaps:79 -   ✅ BTC/USDT | no gaps detected in last 1 candles
+2026-03-19 14:58:36.289 | WARNING  | __main__:check_gaps:76 -   ⚠️  ETH/USDT | possible gap — 67 min span for 11 candles (expected ~10)
+2026-03-19 14:58:36.290 | WARNING  | __main__:check_gaps:76 -   ⚠️  BNB/USDT | possible gap — 67 min span for 48 candles (expected ~47)
+2026-03-19 14:58:36.291 | INFO     | __main__:check_redis_queue:84 - ── Redis queue ─────────────────────────────────
+2026-03-19 14:58:36.304 | INFO     | __main__:check_redis_queue:88 -   raw:market_data queue depth: 3 items
+2026-03-19 14:58:36.304 | INFO     | __main__:check_redis_queue:94 -   ✅ Queue depth OK
+2026-03-19 14:58:36.305 | INFO     | __main__:check_freshness:102 - ── Freshness check ─────────────────────────────
+2026-03-19 14:58:36.358 | INFO     | __main__:check_freshness:121 -   ✅ BTC/USDT | fresh (96s ago)
+2026-03-19 14:58:36.359 | INFO     | __main__:check_freshness:121 -   ✅ ETH/USDT | fresh (96s ago)
+2026-03-19 14:58:36.359 | INFO     | __main__:check_freshness:121 -   ✅ BNB/USDT | fresh (96s ago)
+2026-03-19 14:58:36.360 | INFO     | __main__:<module>:137 - =======================================================
+2026-03-19 14:58:36.361 | WARNING  | __main__:<module>:143 - Some checks need attention: ['Gaps']
+2026-03-19 14:58:36.361 | INFO     | __main__:<module>:144 - This may be normal if the collector just started. Re-run in 2 minutes.
+2026-03-19 14:58:52.130 | INFO     | data_ingestion.collector:run_once:131 - ✅ BTC/USDT | 07:57 | close=70,241.9000 | vol=16.11
+2026-03-19 14:58:54.747 | INFO     | data_ingestion.collector:run_once:131 - ✅ ETH/USDT | 07:57 | close=2,168.5300 | vol=140.50
+2026-03-19 14:58:59.196 | INFO     | data_ingestion.collector:run_once:131 - ✅ BNB/USDT | 07:57 | close=645.5000 | vol=0.38
+2026-03-19 14:58:59.196 | INFO     | data_ingestion.collector:run_once:139 - Round done: 3/3 symbols OK
+2026-03-19 14:59:16.529 | INFO     | data_ingestion.collector:get_exchange:55 - Exchange ready: bybit | symbols: ['BTC/USDT', 'ETH/USDT', 'BNB/USDT'] | timeframe: 1m
+2026-03-19 14:59:21.439 | INFO     | __main__:<module>:126 - =======================================================
+2026-03-19 14:59:21.439 | INFO     | __main__:<module>:127 - Phase 2 — Data Collector Verification
+2026-03-19 14:59:21.440 | INFO     | __main__:<module>:128 - =======================================================
+2026-03-19 14:59:21.440 | INFO     | __main__:check_row_counts:27 - ── Row counts ──────────────────────────────────
+2026-03-19 14:59:21.491 | INFO     | database.db:get_pool:30 - PostgreSQL connection pool created (min=1, max=10)
+2026-03-19 14:59:21.555 | INFO     | __main__:check_row_counts:47 -   BNB/USDT [1m] | 43,201 rows | latest: 2 min ago
+2026-03-19 14:59:21.556 | INFO     | __main__:check_row_counts:47 -   BTC/USDT [1m] | 43,201 rows | latest: 2 min ago
+2026-03-19 14:59:21.556 | INFO     | __main__:check_row_counts:47 -   ETH/USDT [1m] | 43,201 rows | latest: 2 min ago
+2026-03-19 14:59:21.557 | INFO     | __main__:check_gaps:53 - ── Gap check (last 60 candles) ─────────────────
+2026-03-19 14:59:21.571 | INFO     | __main__:check_gaps:79 -   ✅ BTC/USDT | no gaps detected in last 1 candles
+2026-03-19 14:59:21.571 | WARNING  | __main__:check_gaps:76 -   ⚠️  ETH/USDT | possible gap — 67 min span for 11 candles (expected ~10)
+2026-03-19 14:59:21.572 | WARNING  | __main__:check_gaps:76 -   ⚠️  BNB/USDT | possible gap — 67 min span for 48 candles (expected ~47)
+2026-03-19 14:59:21.573 | INFO     | __main__:check_redis_queue:84 - ── Redis queue ─────────────────────────────────
+2026-03-19 14:59:21.586 | INFO     | __main__:check_redis_queue:88 -   raw:market_data queue depth: 6 items
+2026-03-19 14:59:21.587 | INFO     | __main__:check_redis_queue:94 -   ✅ Queue depth OK
+2026-03-19 14:59:21.588 | INFO     | __main__:check_freshness:102 - ── Freshness check ─────────────────────────────
+2026-03-19 14:59:21.651 | INFO     | __main__:check_freshness:121 -   ✅ BTC/USDT | fresh (141s ago)
+2026-03-19 14:59:21.652 | INFO     | __main__:check_freshness:121 -   ✅ ETH/USDT | fresh (141s ago)
+2026-03-19 14:59:21.653 | INFO     | __main__:check_freshness:121 -   ✅ BNB/USDT | fresh (141s ago)
+2026-03-19 14:59:21.653 | INFO     | __main__:<module>:137 - =======================================================
+2026-03-19 14:59:21.654 | WARNING  | __main__:<module>:143 - Some checks need attention: ['Gaps']
+2026-03-19 14:59:21.654 | INFO     | __main__:<module>:144 - This may be normal if the collector just started. Re-run in 2 minutes.
