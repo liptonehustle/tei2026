@@ -1,0 +1,402 @@
+{
+  "title": "AI Trading Platform",
+  "uid": "trading-main",
+  "version": 2,
+  "schemaVersion": 38,
+  "refresh": "1m",
+  "time": { "from": "now-7d", "to": "now" },
+  "timezone": "utc",
+  "tags": ["trading", "ai"],
+  "panels": [
+
+    {
+      "id": 1,
+      "title": "Equity Curve (Cumulative P&L)",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 0, "w": 16, "h": 8 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "lineWidth": 2, "fillOpacity": 15 },
+          "unit": "currencyUSD",
+          "decimals": 2
+        }
+      },
+      "options": {
+        "tooltip": { "mode": "single" },
+        "legend": { "displayMode": "list", "placement": "bottom" }
+      },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT\n  date_trunc('hour', closed_at) AS time,\n  SUM(profit_loss) OVER (ORDER BY date_trunc('hour', closed_at)) AS cumulative_pnl\nFROM trades\nWHERE status = 'closed'\n  AND closed_at >= $__timeFrom()\n  AND closed_at <= $__timeTo()\nORDER BY time",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 2,
+      "title": "Daily P&L",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 8, "w": 16, "h": 7 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "custom": { "lineWidth": 1, "fillOpacity": 20, "thresholdsStyle": { "mode": "line" } },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 0 }] },
+          "color": { "mode": "thresholds" }
+        }
+      },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT\n  date_trunc('day', closed_at) AS time,\n  SUM(profit_loss) AS daily_pnl\nFROM trades\nWHERE status = 'closed'\n  AND closed_at >= $__timeFrom()\n  AND closed_at <= $__timeTo()\nGROUP BY 1\nORDER BY 1",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 3,
+      "title": "Total P&L",
+      "type": "stat",
+      "gridPos": { "x": 16, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD", "decimals": 2,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 0 }] },
+          "color": { "mode": "thresholds" }
+        }
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none" },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT NOW() AS time, COALESCE(SUM(profit_loss), 0) AS total_pnl FROM trades WHERE status = 'closed'",
+          "format": "time_series", "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 4,
+      "title": "Win Rate",
+      "type": "stat",
+      "gridPos": { "x": 20, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit", "decimals": 1,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "yellow", "value": 0.4 }, { "color": "green", "value": 0.55 }] },
+          "color": { "mode": "thresholds" }
+        }
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none" },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT NOW() AS time,\n  COALESCE(SUM(CASE WHEN profit_loss > 0 THEN 1 ELSE 0 END)::float / NULLIF(COUNT(*), 0), 0) AS win_rate\nFROM trades WHERE status = 'closed'",
+          "format": "time_series", "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 5,
+      "title": "Total Trades",
+      "type": "stat",
+      "gridPos": { "x": 16, "y": 4, "w": 4, "h": 4 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": { "defaults": { "unit": "none", "decimals": 0, "color": { "mode": "fixed", "fixedColor": "blue" } } },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none" },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT NOW() AS time, COUNT(*) AS total_trades FROM trades WHERE status = 'closed'",
+          "format": "time_series", "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 6,
+      "title": "Open Trades",
+      "type": "stat",
+      "gridPos": { "x": 20, "y": 4, "w": 4, "h": 4 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 0,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 2 }, { "color": "red", "value": 3 }] },
+          "color": { "mode": "thresholds" }
+        }
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "none" },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT NOW() AS time, COUNT(*) AS open_trades FROM trades WHERE status = 'open'",
+          "format": "time_series", "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 7,
+      "title": "Open Positions",
+      "type": "table",
+      "gridPos": { "x": 0, "y": 15, "w": 24, "h": 6 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": {
+        "defaults": { "custom": { "align": "auto" } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "entry_price" }, "properties": [{ "id": "unit", "value": "currencyUSD" }] },
+          { "matcher": { "id": "byName", "options": "quantity" }, "properties": [{ "id": "decimals", "value": 6 }] }
+        ]
+      },
+      "options": { "showHeader": true },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT id, symbol, side, ROUND(entry_price::numeric, 4) AS entry_price, ROUND(quantity::numeric, 6) AS quantity, timestamp, notes\nFROM trades WHERE status = 'open' ORDER BY timestamp DESC",
+          "format": "table", "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 8,
+      "title": "Trade History",
+      "type": "table",
+      "gridPos": { "x": 0, "y": 21, "w": 24, "h": 8 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": {
+        "defaults": { "custom": { "align": "auto" } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "profit_loss" }, "properties": [
+            { "id": "unit", "value": "currencyUSD" },
+            { "id": "custom.displayMode", "value": "color-text" },
+            { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 0 }] } },
+            { "id": "color", "value": { "mode": "thresholds" } }
+          ]},
+          { "matcher": { "id": "byName", "options": "profit_loss_pct" }, "properties": [
+            { "id": "unit", "value": "percent" },
+            { "id": "custom.displayMode", "value": "color-text" },
+            { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 0 }] } },
+            { "id": "color", "value": { "mode": "thresholds" } }
+          ]}
+        ]
+      },
+      "options": { "showHeader": true, "sortBy": [{ "displayName": "closed_at", "desc": true }] },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT id, symbol, side,\n  ROUND(entry_price::numeric, 4) AS entry_price,\n  ROUND(exit_price::numeric, 4) AS exit_price,\n  ROUND(quantity::numeric, 6) AS quantity,\n  ROUND(profit_loss::numeric, 4) AS profit_loss,\n  ROUND(profit_loss_pct::numeric, 2) AS profit_loss_pct,\n  timestamp AS opened_at, closed_at, notes\nFROM trades\nWHERE status = 'closed'\n  AND closed_at >= $__timeFrom()\n  AND closed_at <= $__timeTo()\nORDER BY closed_at DESC LIMIT 100",
+          "format": "table", "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 9,
+      "title": "Risk Status — Daily P&L",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 29, "w": 12, "h": 7 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD", "decimals": 2,
+          "custom": { "lineWidth": 2 },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 0 }] },
+          "color": { "mode": "thresholds" }
+        }
+      },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT date_trunc('day', closed_at) AS time, SUM(profit_loss) AS daily_pnl\nFROM trades WHERE status = 'closed' AND closed_at >= $__timeFrom() AND closed_at <= $__timeTo()\nGROUP BY 1 ORDER BY 1",
+          "format": "time_series", "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 10,
+      "title": "Risk Status — Trades per Day",
+      "type": "barchart",
+      "gridPos": { "x": 12, "y": 29, "w": 12, "h": 7 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": { "defaults": { "unit": "none", "color": { "mode": "palette-classic" } } },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT date_trunc('day', timestamp) AS time, COUNT(*) AS trades\nFROM trades WHERE timestamp >= $__timeFrom() AND timestamp <= $__timeTo()\nGROUP BY 1 ORDER BY 1",
+          "format": "time_series", "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 11,
+      "title": "── STRATEGY COMPARISON ──────────────────────────────────────────",
+      "type": "text",
+      "gridPos": { "x": 0, "y": 36, "w": 24, "h": 2 },
+      "options": { "mode": "markdown", "content": "## 📊 Strategy Comparison\nVirtual P&L per strategy — tracks what each strategy would have earned if always selected." }
+    },
+
+    {
+      "id": 12,
+      "title": "Strategy Virtual P&L Comparison",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 38, "w": 24, "h": 9 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD", "decimals": 2,
+          "custom": { "lineWidth": 2, "fillOpacity": 5 }
+        }
+      },
+      "options": {
+        "tooltip": { "mode": "multi" },
+        "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["lastNotNull", "max", "min"] }
+      },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT\n  date_trunc('hour', exit_time) AS time,\n  strategy_name,\n  SUM(virtual_pnl) OVER (PARTITION BY strategy_name ORDER BY date_trunc('hour', exit_time)) AS cumulative_pnl\nFROM strategy_virtual_trades\nWHERE status = 'closed'\n  AND exit_time >= $__timeFrom()\n  AND exit_time <= $__timeTo()\nORDER BY time",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 13,
+      "title": "Strategy Performance Summary",
+      "type": "table",
+      "gridPos": { "x": 0, "y": 47, "w": 24, "h": 8 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": {
+        "defaults": { "custom": { "align": "auto" } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "win_rate" }, "properties": [
+            { "id": "unit", "value": "percentunit" },
+            { "id": "custom.displayMode", "value": "color-background" },
+            { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "yellow", "value": 0.4 }, { "color": "green", "value": 0.55 }] } },
+            { "id": "color", "value": { "mode": "thresholds" } }
+          ]},
+          { "matcher": { "id": "byName", "options": "total_virtual_pnl" }, "properties": [
+            { "id": "unit", "value": "currencyUSD" },
+            { "id": "custom.displayMode", "value": "color-text" },
+            { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 0 }] } },
+            { "id": "color", "value": { "mode": "thresholds" } }
+          ]},
+          { "matcher": { "id": "byName", "options": "avg_pnl_per_trade" }, "properties": [{ "id": "unit", "value": "currencyUSD" }] },
+          { "matcher": { "id": "byName", "options": "best_trade_pnl" }, "properties": [{ "id": "unit", "value": "currencyUSD" }] },
+          { "matcher": { "id": "byName", "options": "worst_trade_pnl" }, "properties": [{ "id": "unit", "value": "currencyUSD" }] }
+        ]
+      },
+      "options": { "showHeader": true, "sortBy": [{ "displayName": "total_virtual_pnl", "desc": true }] },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT\n  strategy_name,\n  total_signals,\n  total_trades,\n  winning_trades,\n  losing_trades,\n  ROUND(win_rate::numeric, 4) AS win_rate,\n  ROUND(total_virtual_pnl::numeric, 4) AS total_virtual_pnl,\n  ROUND(avg_pnl_per_trade::numeric, 4) AS avg_pnl_per_trade,\n  ROUND(best_trade_pnl::numeric, 4) AS best_trade_pnl,\n  ROUND(worst_trade_pnl::numeric, 4) AS worst_trade_pnl,\n  times_selected,\n  last_updated\nFROM strategy_performance_summary\nORDER BY total_virtual_pnl DESC",
+          "format": "table", "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 14,
+      "title": "Strategy Signals — Activity Heatmap",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 55, "w": 24, "h": 8 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": {
+        "defaults": { "custom": { "lineWidth": 1, "fillOpacity": 10 }, "unit": "none" }
+      },
+      "options": {
+        "tooltip": { "mode": "multi" },
+        "legend": { "displayMode": "list", "placement": "bottom" }
+      },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT\n  date_trunc('hour', timestamp) AS time,\n  strategy_name,\n  COUNT(*) FILTER (WHERE action != 'hold') AS actionable_signals\nFROM strategy_signals\nWHERE timestamp >= $__timeFrom()\n  AND timestamp <= $__timeTo()\nGROUP BY 1, 2\nORDER BY 1",
+          "format": "time_series", "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 15,
+      "title": "Strategy Selection Rate",
+      "type": "piechart",
+      "gridPos": { "x": 0, "y": 63, "w": 8, "h": 8 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": { "defaults": { "unit": "none" } },
+      "options": { "pieType": "pie", "tooltip": { "mode": "single" }, "legend": { "displayMode": "list", "placement": "right" } },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT strategy_name, times_selected FROM strategy_performance_summary WHERE times_selected > 0 ORDER BY times_selected DESC",
+          "format": "table", "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 16,
+      "title": "Average Confidence per Strategy",
+      "type": "bargauge",
+      "gridPos": { "x": 8, "y": 63, "w": 8, "h": 8 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit", "min": 0, "max": 1,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "yellow", "value": 0.5 }, { "color": "green", "value": 0.65 }] },
+          "color": { "mode": "thresholds" }
+        }
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "orientation": "horizontal", "displayMode": "gradient" },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT\n  NOW() AS time,\n  strategy_name,\n  COALESCE(AVG(confidence) FILTER (WHERE action != 'hold'), 0) AS avg_confidence\nFROM strategy_signals\nGROUP BY strategy_name",
+          "format": "time_series", "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 17,
+      "title": "Recent Strategy Signals",
+      "type": "table",
+      "gridPos": { "x": 16, "y": 63, "w": 8, "h": 8 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": {
+        "defaults": { "custom": { "align": "auto" } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "action" }, "properties": [{ "id": "custom.width", "value": 60 }] },
+          { "matcher": { "id": "byName", "options": "was_selected" }, "properties": [{ "id": "custom.width", "value": 40 }] }
+        ]
+      },
+      "options": { "showHeader": true },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT\n  strategy_name,\n  symbol,\n  action,\n  ROUND(confidence::numeric, 2) AS conf,\n  was_selected AS sel,\n  timestamp\nFROM strategy_signals\nWHERE action != 'hold'\nORDER BY timestamp DESC\nLIMIT 20",
+          "format": "table", "refId": "A"
+        }
+      ]
+    }
+
+  ]
+}

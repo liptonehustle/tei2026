@@ -1,0 +1,77 @@
+{
+  "symbol": "BTC/USDT",
+  "best": {
+    "prob_thresh": 0.7,
+    "sl_pct": 0.005,
+    "tp_pct": 0.01,
+    "max_hold": 60,
+    "trades": 236,
+    "win_rate": 0.6017,
+    "total_return": 1.0087,
+    "sharpe": 23.2024,
+    "profit_factor": 1.9862,
+    "final_capital": 20086.8
+  },
+  "top5": [
+    {
+      "prob_thresh": 0.7,
+      "sl_pct": 0.005,
+      "tp_pct": 0.01,
+      "max_hold": 60,
+      "trades": 236,
+      "win_rate": 0.6017,
+      "total_return": 1.0087,
+      "sharpe": 23.2024,
+      "profit_factor": 1.9862,
+      "final_capital": 20086.8
+    },
+    {
+      "prob_thresh": 0.75,
+      "sl_pct": 0.005,
+      "tp_pct": 0.01,
+      "max_hold": 60,
+      "trades": 163,
+      "win_rate": 0.6012,
+      "total_return": 0.7178,
+      "sharpe": 21.2972,
+      "profit_factor": 2.1388,
+      "final_capital": 17177.63
+    },
+    {
+      "prob_thresh": 0.75,
+      "sl_pct": 0.005,
+      "tp_pct": 0.02,
+      "max_hold": 30,
+      "trades": 188,
+      "win_rate": 0.5798,
+      "total_return": 0.692,
+      "sharpe": 19.9165,
+      "profit_factor": 2.3267,
+      "final_capital": 16919.72
+    },
+    {
+      "prob_thresh": 0.7,
+      "sl_pct": 0.008,
+      "tp_pct": 0.015,
+      "max_hold": 60,
+      "trades": 221,
+      "win_rate": 0.6018,
+      "total_return": 0.5428,
+      "sharpe": 18.949,
+      "profit_factor": 1.9116,
+      "final_capital": 15427.92
+    },
+    {
+      "prob_thresh": 0.7,
+      "sl_pct": 0.008,
+      "tp_pct": 0.01,
+      "max_hold": 60,
+      "trades": 237,
+      "win_rate": 0.6371,
+      "total_return": 0.4516,
+      "sharpe": 18.9044,
+      "profit_factor": 1.8561,
+      "final_capital": 14516.5
+    }
+  ]
+}

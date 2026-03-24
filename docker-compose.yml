@@ -65,6 +65,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
       - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
     networks:
       - trading_net
     depends_on:
@@ -87,13 +89,41 @@ services:
       redis:
         condition: service_healthy
 
+ # -----------------------------------------------------------
+  # Grafana — trading dashboard
+  # Access: http://localhost:3000
+  # Login: admin / grafana123 (or set GF_SECURITY_ADMIN_PASSWORD in .env)
+  # -----------------------------------------------------------
+  grafana:
+    image: grafana/grafana:latest
+    container_name: trading_grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /etc/grafana/provisioning/dashboards/trading.json
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+    ports:
+      - "3000:3000"
+    networks:
+      - trading_net
+    depends_on:
+      postgres:
+        condition: service_healthy
+ 
 # -----------------------------------------------------------
 # Volumes — persistent storage
 # -----------------------------------------------------------
 volumes:
   postgres_data:
   redis_data:
-
+  grafana_data:
+  pgadmin_data:
+ 
 # -----------------------------------------------------------
 # Network — isolated bridge network for all services
 # -----------------------------------------------------------

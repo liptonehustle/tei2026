@@ -42,7 +42,7 @@ def get_redis() -> redis_lib.Redis:
 
 # ── Constants ──────────────────────────────────────────────
 SYMBOLS   = ["BTC/USDT", "ETH/USDT", "BNB/USDT"]
-TIMEFRAME = "1m"
+TIMEFRAME = "5m"
 SOURCE    = "bybit"
 
 # ── Exchange ───────────────────────────────────────────────

@@ -1,0 +1,16 @@
+{
+  "symbol": "BTC/USDT",
+  "total_trades": 909,
+  "win_rate": 0.4983,
+  "total_pnl": 14506.6173,
+  "total_return": 1.4507,
+  "sharpe_ratio": -4.5625,
+  "max_drawdown": -0.5428,
+  "profit_factor": 1.3662,
+  "avg_win": 119.4741,
+  "avg_loss": -86.8753,
+  "final_capital": 6736.09,
+  "model_version": "xgb_BTCUSDT_v20260319_1019",
+  "days": 30,
+  "run_at": "2026-03-19T10:22:48.010855+00:00"
+}

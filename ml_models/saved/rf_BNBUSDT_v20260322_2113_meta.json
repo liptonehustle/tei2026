@@ -1,0 +1,34 @@
+{
+  "version": "rf_BNBUSDT_v20260322_2113",
+  "symbol": "BNB/USDT",
+  "model_type": "rf",
+  "timeframe": "5m",
+  "features": [
+    "rsi_14",
+    "macd_norm",
+    "macd_signal_norm",
+    "macd_hist_norm",
+    "atr_norm",
+    "bb_position",
+    "bb_width",
+    "adx",
+    "ema_20_slope",
+    "ema_50_slope",
+    "ema_cross",
+    "return_1",
+    "return_3",
+    "return_5",
+    "volatility_10",
+    "candle_body",
+    "candle_shadow",
+    "volume_ratio"
+  ],
+  "metrics": {
+    "accuracy": 0.7219,
+    "precision": 0.3065,
+    "recall": 0.3912,
+    "f1": 0.3437,
+    "roc_auc": 0.6484
+  },
+  "trained_at": "2026-03-22T21:13:36.532963+00:00"
+}

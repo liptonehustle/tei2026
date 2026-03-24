@@ -26,6 +26,7 @@ def get_pool() -> pool.SimpleConnectionPool:
             user=db_cfg.USER,
             password=db_cfg.PASSWORD,
             dbname=db_cfg.DB,
+            options="-c timezone=UTC",
         )
         logger.info("PostgreSQL connection pool created (min=1, max=10)")
     return _pool

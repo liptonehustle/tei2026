@@ -1,0 +1,16 @@
+{
+  "symbol": "ETH/USDT",
+  "total_trades": 895,
+  "win_rate": 0.5028,
+  "total_pnl": 25888.8711,
+  "total_return": 2.5889,
+  "sharpe_ratio": 3.8194,
+  "max_drawdown": -0.5311,
+  "profit_factor": 1.4117,
+  "avg_win": 197.2847,
+  "avg_loss": -141.3241,
+  "final_capital": 11276.76,
+  "model_version": "xgb_ETHUSDT_v20260319_1019",
+  "days": 30,
+  "run_at": "2026-03-19T10:22:48.603037+00:00"
+}

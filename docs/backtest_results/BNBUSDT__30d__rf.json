@@ -1,0 +1,16 @@
+{
+  "symbol": "BNB/USDT",
+  "total_trades": 458,
+  "win_rate": 0.5677,
+  "total_pnl": 7995.8844,
+  "total_return": 0.7996,
+  "sharpe_ratio": 5.0829,
+  "max_drawdown": -0.3208,
+  "profit_factor": 1.6658,
+  "avg_win": 76.9462,
+  "avg_loss": -60.6572,
+  "final_capital": 11185.72,
+  "model_version": "rf_BNBUSDT_v20260319_1019",
+  "days": 30,
+  "run_at": "2026-03-19T10:29:56.124583+00:00"
+}

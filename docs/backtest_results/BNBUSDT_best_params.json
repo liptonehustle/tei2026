@@ -1,0 +1,77 @@
+{
+  "symbol": "BNB/USDT",
+  "best": {
+    "prob_thresh": 0.7,
+    "sl_pct": 0.008,
+    "tp_pct": 0.02,
+    "max_hold": 60,
+    "trades": 174,
+    "win_rate": 0.5977,
+    "total_return": 0.5361,
+    "sharpe": 20.8808,
+    "profit_factor": 2.1447,
+    "final_capital": 15360.87
+  },
+  "top5": [
+    {
+      "prob_thresh": 0.7,
+      "sl_pct": 0.008,
+      "tp_pct": 0.02,
+      "max_hold": 60,
+      "trades": 174,
+      "win_rate": 0.5977,
+      "total_return": 0.5361,
+      "sharpe": 20.8808,
+      "profit_factor": 2.1447,
+      "final_capital": 15360.87
+    },
+    {
+      "prob_thresh": 0.7,
+      "sl_pct": 0.008,
+      "tp_pct": 0.015,
+      "max_hold": 60,
+      "trades": 176,
+      "win_rate": 0.5909,
+      "total_return": 0.381,
+      "sharpe": 17.241,
+      "profit_factor": 1.9675,
+      "final_capital": 13810.35
+    },
+    {
+      "prob_thresh": 0.7,
+      "sl_pct": 0.005,
+      "tp_pct": 0.02,
+      "max_hold": 60,
+      "trades": 168,
+      "win_rate": 0.5714,
+      "total_return": 0.5723,
+      "sharpe": 16.7144,
+      "profit_factor": 1.894,
+      "final_capital": 15723.33
+    },
+    {
+      "prob_thresh": 0.7,
+      "sl_pct": 0.01,
+      "tp_pct": 0.02,
+      "max_hold": 60,
+      "trades": 181,
+      "win_rate": 0.5856,
+      "total_return": 0.308,
+      "sharpe": 16.6892,
+      "profit_factor": 1.903,
+      "final_capital": 13080.12
+    },
+    {
+      "prob_thresh": 0.7,
+      "sl_pct": 0.005,
+      "tp_pct": 0.02,
+      "max_hold": 30,
+      "trades": 246,
+      "win_rate": 0.6301,
+      "total_return": 0.39,
+      "sharpe": 14.8504,
+      "profit_factor": 2.0399,
+      "final_capital": 13899.56
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "symbol": "ETH/USDT",
+  "best": {
+    "prob_thresh": 0.7,
+    "sl_pct": 0.005,
+    "tp_pct": 0.02,
+    "max_hold": 30,
+    "trades": 171,
+    "win_rate": 0.5673,
+    "total_return": 0.6964,
+    "sharpe": 20.6925,
+    "profit_factor": 2.147,
+    "final_capital": 16964.29
+  },
+  "top5": [
+    {
+      "prob_thresh": 0.7,
+      "sl_pct": 0.005,
+      "tp_pct": 0.02,
+      "max_hold": 30,
+      "trades": 171,
+      "win_rate": 0.5673,
+      "total_return": 0.6964,
+      "sharpe": 20.6925,
+      "profit_factor": 2.147,
+      "final_capital": 16964.29
+    },
+    {
+      "prob_thresh": 0.7,
+      "sl_pct": 0.005,
+      "tp_pct": 0.015,
+      "max_hold": 30,
+      "trades": 175,
+      "win_rate": 0.5714,
+      "total_return": 0.6153,
+      "sharpe": 19.3853,
+      "profit_factor": 2.0776,
+      "final_capital": 16153.17
+    },
+    {
+      "prob_thresh": 0.7,
+      "sl_pct": 0.005,
+      "tp_pct": 0.01,
+      "max_hold": 30,
+      "trades": 181,
+      "win_rate": 0.6077,
+      "total_return": 0.4698,
+      "sharpe": 17.9394,
+      "profit_factor": 2.0684,
+      "final_capital": 14698.2
+    },
+    {
+      "prob_thresh": 0.7,
+      "sl_pct": 0.005,
+      "tp_pct": 0.02,
+      "max_hold": 15,
+      "trades": 220,
+      "win_rate": 0.5409,
+      "total_return": 0.4157,
+      "sharpe": 14.5594,
+      "profit_factor": 2.0416,
+      "final_capital": 14156.52
+    },
+    {
+      "prob_thresh": 0.7,
+      "sl_pct": 0.008,
+      "tp_pct": 0.02,
+      "max_hold": 30,
+      "trades": 201,
+      "win_rate": 0.5622,
+      "total_return": 0.268,
+      "sharpe": 14.3362,
+      "profit_factor": 1.876,
+      "final_capital": 12680.21
+    }
+  ]
+}
