@@ -1,7 +1,7 @@
 {
   "title": "AI Trading Platform",
   "uid": "trading-main",
-  "version": 2,
+  "version": 3,
   "schemaVersion": 38,
   "refresh": "1m",
   "time": { "from": "now-7d", "to": "now" },
@@ -38,8 +38,86 @@
     },
 
     {
+      "id": 18,
+      "title": "Daily Wins vs Losses (Stacked)",
+      "type": "timeseries",
+      "gridPos": { "x": 16, "y": 0, "w": 8, "h": 4 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 80,
+            "stacking": { "group": "A", "mode": "normal" }
+          },
+          "unit": "none",
+          "decimals": 0
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "wins" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "losses" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": { "mode": "multi" },
+        "legend": { "displayMode": "list", "placement": "bottom", "calcs": ["sum"] }
+      },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT\n  date_trunc('day', closed_at) AS time,\n  COUNT(*) FILTER (WHERE profit_loss > 0) AS wins,\n  COUNT(*) FILTER (WHERE profit_loss <= 0) AS losses\nFROM trades\nWHERE status = 'closed'\n  AND closed_at >= $__timeFrom()\n  AND closed_at <= $__timeTo()\nGROUP BY 1\nORDER BY 1",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 19,
+      "title": "Daily P&L (Bar Chart)",
+      "type": "barchart",
+      "gridPos": { "x": 16, "y": 4, "w": 8, "h": 4 },
+      "datasource": { "uid": "trading_postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "custom": { "fillOpacity": 90, "barWidthFactor": 0.8 },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "green", "value": 0 }
+            ]
+          },
+          "color": { "mode": "thresholds" }
+        }
+      },
+      "options": {
+        "tooltip": { "mode": "single" },
+        "legend": { "displayMode": "list", "placement": "bottom", "calcs": ["sum", "mean"] },
+        "orientation": "auto"
+      },
+      "targets": [
+        {
+          "datasource": { "uid": "trading_postgres" },
+          "rawSql": "SELECT\n  date_trunc('day', closed_at) AS time,\n  SUM(profit_loss) AS daily_pnl\nFROM trades\nWHERE status = 'closed'\n  AND closed_at >= $__timeFrom()\n  AND closed_at <= $__timeTo()\nGROUP BY 1\nORDER BY 1",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
       "id": 2,
-      "title": "Daily P&L",
+      "title": "Daily P&L (Line)",
       "type": "timeseries",
       "gridPos": { "x": 0, "y": 8, "w": 16, "h": 7 },
       "datasource": { "uid": "trading_postgres" },
@@ -66,7 +144,7 @@
       "id": 3,
       "title": "Total P&L",
       "type": "stat",
-      "gridPos": { "x": 16, "y": 0, "w": 4, "h": 4 },
+      "gridPos": { "x": 16, "y": 8, "w": 4, "h": 3 },
       "datasource": { "uid": "trading_postgres" },
       "fieldConfig": {
         "defaults": {
@@ -89,7 +167,7 @@
       "id": 4,
       "title": "Win Rate",
       "type": "stat",
-      "gridPos": { "x": 20, "y": 0, "w": 4, "h": 4 },
+      "gridPos": { "x": 20, "y": 8, "w": 4, "h": 3 },
       "datasource": { "uid": "trading_postgres" },
       "fieldConfig": {
         "defaults": {
@@ -112,7 +190,7 @@
       "id": 5,
       "title": "Total Trades",
       "type": "stat",
-      "gridPos": { "x": 16, "y": 4, "w": 4, "h": 4 },
+      "gridPos": { "x": 16, "y": 11, "w": 4, "h": 3 },
       "datasource": { "uid": "trading_postgres" },
       "fieldConfig": { "defaults": { "unit": "none", "decimals": 0, "color": { "mode": "fixed", "fixedColor": "blue" } } },
       "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none" },
@@ -129,7 +207,7 @@
       "id": 6,
       "title": "Open Trades",
       "type": "stat",
-      "gridPos": { "x": 20, "y": 4, "w": 4, "h": 4 },
+      "gridPos": { "x": 20, "y": 11, "w": 4, "h": 3 },
       "datasource": { "uid": "trading_postgres" },
       "fieldConfig": {
         "defaults": {

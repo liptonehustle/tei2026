@@ -8,6 +8,7 @@ the latest candle. Called by the decision engine.
 
 Usage:
   python -m ml_models.predictor --symbol BTC/USDT
+  python -m ml_models.predictor --symbol BTCUSDT --model rf
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
 
@@ -29,27 +30,34 @@ from database.queries import save_prediction
 SYMBOLS   = ["BTC/USDT", "ETH/USDT", "BNB/USDT"]
 TIMEFRAME = "5m"
 
+# Map untuk format symbol (CLI format -> DB format)
+SYMBOL_TO_DB = {
+    "BTCUSDT": "BTC/USDT",
+    "ETHUSDT": "ETH/USDT", 
+    "BNBUSDT": "BNB/USDT",
+}
+
 
 def predict_latest(symbol: str, model_type: str = "rf") -> dict | None:
     """
     Generate a prediction for the latest candle of a symbol.
-
-    Returns dict:
-        symbol, timestamp, prob_up, prob_down, model_version, features_hash
-    Or None if prediction fails.
+    symbol can be in format "BTCUSDT" or "BTC/USDT"
     """
+    # Convert symbol format if needed
+    db_symbol = SYMBOL_TO_DB.get(symbol, symbol)
+    
     # Load latest saved model
-    version = get_latest_version(symbol, model_type)
+    version = get_latest_version(db_symbol, model_type)
     if not version:
-        logger.error(f"No trained model found for {symbol} [{model_type}] — run trainer first")
+        logger.error(f"No trained model found for {db_symbol} [{model_type}] — run trainer first")
         return None
 
     model, scaler, meta = load_model(version)
 
     # Build features (use last 500 candles for context)
-    df = build_features(symbol, timeframe=TIMEFRAME, limit=500)
+    df = build_features(db_symbol, timeframe=TIMEFRAME, limit=500)
     if df.empty:
-        logger.error(f"Could not build features for {symbol}")
+        logger.error(f"Could not build features for {db_symbol}")
         return None
 
     # Use the very last row (most recent candle)
@@ -66,7 +74,7 @@ def predict_latest(symbol: str, model_type: str = "rf") -> dict | None:
     features_hash = hashlib.sha256(X.tobytes()).hexdigest()[:16]
 
     result = {
-        "symbol":        symbol,
+        "symbol":        db_symbol,
         "timestamp":     timestamp,
         "timeframe":     TIMEFRAME,
         "prob_up":       round(prob_up, 4),
@@ -81,7 +89,7 @@ def predict_latest(symbol: str, model_type: str = "rf") -> dict | None:
     result["prediction_id"] = pred_id
 
     logger.info(
-        f"📊 {symbol} | prob_up={prob_up:.2%} prob_down={prob_down:.2%} "
+        f"📊 {db_symbol} | prob_up={prob_up:.2%} prob_down={prob_down:.2%} "
         f"| model={version}"
     )
 

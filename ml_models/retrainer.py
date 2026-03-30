@@ -59,11 +59,8 @@ def save_state(state: dict):
 
 # ── Performance evaluation ─────────────────────────────
 
-def get_recent_win_rate(days: int = 3) -> float | None:
-    """
-    Calculate win rate from closed trades in the last N days.
-    Returns None if not enough data.
-    """
+def get_recent_win_rate(symbol: str, days: int = 3) -> float | None:
+    """Calculate win rate per symbol from real trades"""
     try:
         since = datetime.now(timezone.utc) - timedelta(days=days)
         with DB() as (conn, cur):
@@ -72,22 +69,21 @@ def get_recent_win_rate(days: int = 3) -> float | None:
                     COUNT(*) AS total,
                     SUM(CASE WHEN profit_loss > 0 THEN 1 ELSE 0 END) AS wins
                 FROM trades
-                WHERE status = 'closed'
-                  AND closed_at >= %s
-            """, (since,))
+                WHERE symbol = %s AND status = 'closed' AND closed_at >= %s
+            """, (symbol, since))
             row = cur.fetchone()
-
+        
         total, wins = row
         if not total or total < MIN_TRADES_TO_EVAL:
-            logger.info(f"  Not enough trades to evaluate ({total or 0} < {MIN_TRADES_TO_EVAL})")
+            logger.info(f"  {symbol}: not enough trades ({total or 0} < {MIN_TRADES_TO_EVAL})")
             return None
-
+        
         win_rate = float(wins) / float(total)
-        logger.info(f"  Recent win rate ({days}d): {win_rate:.1%} ({wins}/{total} trades)")
+        logger.info(f"  {symbol}: win rate ({days}d) = {win_rate:.1%} ({wins}/{total})")
         return win_rate
-
+        
     except Exception as e:
-        logger.error(f"Could not calculate win rate: {e}")
+        logger.error(f"Win rate error for {symbol}: {e}")
         return None
 
 
@@ -123,20 +119,15 @@ def should_retrain_scheduled(state: dict) -> bool:
     return False
 
 
-def should_retrain_performance() -> bool:
-    """Check if win rate has dropped below threshold."""
-    win_rate = get_recent_win_rate(days=3)
+def should_retrain_performance(symbol: str) -> bool:
+    """Check performance per symbol"""
+    win_rate = get_recent_win_rate(symbol, days=3)
     if win_rate is None:
         return False
-
     if win_rate < WIN_RATE_THRESHOLD:
-        logger.warning(
-            f"  ⚠️  Win rate {win_rate:.1%} below threshold {WIN_RATE_THRESHOLD:.1%} "
-            f"— performance retrain triggered"
-        )
+        logger.warning(f"⚠️ {symbol} win rate {win_rate:.1%} < {WIN_RATE_THRESHOLD:.1%}")
         return True
-
-    logger.info(f"  Win rate {win_rate:.1%} OK (threshold={WIN_RATE_THRESHOLD:.1%})")
+    logger.info(f"  {symbol} win rate {win_rate:.1%} OK")
     return False
 
 
@@ -232,17 +223,32 @@ def run_retrainer():
     state   = load_state()
     trigger = None
 
-    # Check triggers
-    perf_drop = should_retrain_performance()
+    # Cek per-symbol performance
+    symbols_to_retrain = []
+    for symbol in SYMBOLS:
+        if should_retrain_performance(symbol):
+            symbols_to_retrain.append(symbol)
+    
+    # Cek scheduled
     scheduled = should_retrain_scheduled(state)
-
-    if perf_drop:
-        trigger = "performance_drop"
-    elif scheduled:
-        trigger = "scheduled"
-    else:
-        logger.info("No retrain needed — all good ✅")
+    
+    if not symbols_to_retrain and not scheduled:
+        logger.info("No retrain needed")
         return
+    
+    # Retrain hanya symbol yang perlu
+    for symbol in symbols_to_retrain:
+        retrain_symbol(symbol, "performance_drop")
+    
+    if scheduled:
+        for symbol in SYMBOLS:
+            if symbol not in symbols_to_retrain:
+                retrain_symbol(symbol, "scheduled")
+    
+    state["last_retrain"] = datetime.now(timezone.utc).isoformat()
+    state["last_trigger"] = "performance_drop" if symbols_to_retrain else "scheduled"
+    state["retrain_count"] = state.get("retrain_count", 0) + 1
+    save_state(state)
 
     # Retrain all symbols
     logger.info(f"Trigger: {trigger} — retraining all symbols")
@@ -250,18 +256,18 @@ def run_retrainer():
     for symbol in SYMBOLS:
         results[symbol] = retrain_symbol(symbol, trigger)
 
-    # Update state
-    state["last_retrain"]  = datetime.now(timezone.utc).isoformat()
-    state["last_trigger"]  = trigger
-    state["retrain_count"] = state.get("retrain_count", 0) + 1
-    save_state(state)
+    # # Update state
+    # state["last_retrain"]  = datetime.now(timezone.utc).isoformat()
+    # state["last_trigger"]  = trigger
+    # state["retrain_count"] = state.get("retrain_count", 0) + 1
+    # save_state(state)
 
-    # Summary
-    success = sum(results.values())
-    logger.info("=" * 55)
-    logger.info(f"Retrain complete: {success}/{len(SYMBOLS)} symbols updated")
-    for symbol, ok in results.items():
-        logger.info(f"  {'✅' if ok else '❌'} {symbol}")
+    # # Summary
+    # success = sum(results.values())
+    # logger.info("=" * 55)
+    # logger.info(f"Retrain complete: {success}/{len(SYMBOLS)} symbols updated")
+    # for symbol, ok in results.items():
+    #     logger.info(f"  {'✅' if ok else '❌'} {symbol}")
 
 
 if __name__ == "__main__":

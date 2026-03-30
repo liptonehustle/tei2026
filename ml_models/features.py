@@ -1,19 +1,7 @@
 """
 ml_models/features.py
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Phase 5 — Feature Engineering
-
-Builds the feature matrix (X) and labels (y) from
-market_data + indicators tables for ML training.
-
-Label definition:
-  Look 5 candles ahead. If close price goes up >= 0.2% → label=1 (up)
-  Otherwise → label=0 (down/sideways)
-
-Features used:
-  - All technical indicators (EMA, RSI, MACD, ATR, BB, ADX)
-  - Price-derived features (returns, volatility, candle patterns)
-  - Normalized versions to remove price scale bias
+Phase 5 — Feature Engineering (FIXED)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
 
@@ -26,29 +14,16 @@ from loguru import logger
 from database.queries import get_candles, get_indicators
 
 LOOKAHEAD    = 5
-UP_THRESHOLD = 0.002
+UP_THRESHOLD = 0.002  # 0.2%
+
 FEATURE_COLS = [
-    "rsi_14",
-    "macd_norm",
-    "macd_signal_norm",
-    "macd_hist_norm",
-    "atr_norm",
-    "bb_position",
-    "bb_width",
-    "adx",
-    "ema_20_slope",
-    "ema_50_slope",
-    "ema_cross",
-    "return_1",
-    "return_3",
-    "return_5",
-    "volatility_10",
-    "candle_body",
-    "candle_shadow",
-    "volume_ratio",
+    "rsi_14", "macd_norm", "macd_signal_norm", "macd_hist_norm",
+    "atr_norm", "bb_position", "bb_width", "adx",
+    "ema_20_slope", "ema_50_slope", "ema_cross",
+    "return_1", "return_3", "return_5", "volatility_10",
+    "candle_body", "candle_shadow", "volume_ratio",
 ]
 
-# Numeric columns to cast from Decimal → float
 NUMERIC_COLS = [
     "open", "high", "low", "close", "volume",
     "ema_20", "ema_50", "rsi_14", "macd", "macd_signal", "macd_hist",
@@ -69,14 +44,14 @@ def build_features(symbol: str, timeframe: str = "5m", limit: int = 50_000) -> p
     df = pd.merge(candles, indicators, on="timestamp", how="inner")
     df = df.sort_values("timestamp").reset_index(drop=True)
 
-    # ── Fix: cast all numeric cols from Decimal to float ──
+    # Cast numeric cols
     for col in NUMERIC_COLS:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce").astype(float)
 
     logger.info(f"  Merged: {len(df):,} rows")
 
-    # ── Normalized indicator features ──────────────────
+    # Normalized indicator features
     df["macd_norm"]        = df["macd"]        / df["close"]
     df["macd_signal_norm"] = df["macd_signal"] / df["close"]
     df["macd_hist_norm"]   = df["macd_hist"]   / df["close"]
@@ -90,7 +65,7 @@ def build_features(symbol: str, timeframe: str = "5m", limit: int = 50_000) -> p
     df["ema_50_slope"] = df["ema_50"].pct_change(3)
     df["ema_cross"]    = (df["ema_20"] - df["ema_50"]) / df["close"]
 
-    # ── Price-derived features ─────────────────────────
+    # Price-derived features
     df["return_1"]      = df["close"].pct_change(1)
     df["return_3"]      = df["close"].pct_change(3)
     df["return_5"]      = df["close"].pct_change(5)
@@ -102,12 +77,12 @@ def build_features(symbol: str, timeframe: str = "5m", limit: int = 50_000) -> p
     vol_ma = df["volume"].rolling(20).mean()
     df["volume_ratio"]  = df["volume"] / vol_ma.replace(0, np.nan)
 
-    # ── Label ──────────────────────────────────────────
+    # ── Label (price-based for now) ──────────────────────────
     future_close  = df["close"].shift(-LOOKAHEAD)
     future_return = (future_close - df["close"]) / df["close"]
     df["label"]   = (future_return >= UP_THRESHOLD).astype(int)
 
-    # ── Clean up ───────────────────────────────────────
+    # Clean up
     result = df[["timestamp", "close", "label"] + FEATURE_COLS].copy()
     before = len(result)
     result = result.dropna().reset_index(drop=True)

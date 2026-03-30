@@ -19,6 +19,7 @@ import signal
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.events import EVENT_JOB_ERROR, EVENT_JOB_EXECUTED
 from loguru import logger
+from utils.warp import ensure_connected
 
 sys.path.insert(0, ".")
 from data_ingestion.collector import run_once, get_redis, SYMBOLS
@@ -33,6 +34,7 @@ def collect_job():
     """Scheduled job: collect one round of market data."""
     try:
         run_once()
+        ensure_connected()
     except Exception as e:
         logger.error(f"Collection job crashed: {e}")
 
@@ -88,6 +90,7 @@ if __name__ == "__main__":
 
     # Run one collection immediately on startup, then hand off to scheduler
     logger.info("Running initial collection now...")
+    ensure_connected()
     collect_job()
 
     scheduler.start()

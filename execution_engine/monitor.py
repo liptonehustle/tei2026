@@ -123,16 +123,30 @@ def check_positions(exchange) -> list[dict]:
             success = close_position(trade_id, symbol, side, quantity)
             if success:
                 pnl = (exit_price - entry_price) * quantity \
-                      if side == "buy" else \
-                      (entry_price - exit_price) * quantity
+                    if side == "buy" else \
+                    (entry_price - exit_price) * quantity
+                
+                # Hitung profit_loss_pct
+                position_value = entry_price * quantity
+                pnl_pct = (pnl / position_value * 100) if position_value > 0 else 0
 
                 logger.info(
                     f"{'✅' if pnl > 0 else '❌'} {symbol} {side.upper()} closed "
                     f"[{exit_reason}] | entry={entry_price:.4f} exit={exit_price:.4f} "
                     f"P&L={pnl:+.4f} USDT"
-                    
                 )
-                alert_position_closed(symbol, side, quantity, entry_price, exit_price, pnl, exit_reason)
+                
+                # FIX: panggil dengan parameter yang benar
+                alert_position_closed(
+                    symbol=symbol,
+                    side=side,
+                    entry_price=entry_price,
+                    exit_price=exit_price,
+                    profit_loss=pnl,
+                    profit_loss_pct=round(pnl_pct, 2),
+                    exit_reason=exit_reason,
+                    trade_id=trade_id
+                )
                 
                 closed.append({
                     "trade_id":    trade_id,
@@ -140,6 +154,7 @@ def check_positions(exchange) -> list[dict]:
                     "exit_reason": exit_reason,
                     "pnl":         pnl,
                 })
+                
         else:
             unrealized = (current_price - entry_price) * quantity \
                         if side == "buy" else \

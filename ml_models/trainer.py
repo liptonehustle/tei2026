@@ -188,19 +188,23 @@ def get_latest_version(symbol: str, model_type: str) -> str | None:
 # ══════════════════════════════════════════════════════
 
 def train_symbol(symbol: str, model_type: str = "both") -> dict:
-    """
-    Full training pipeline for one symbol.
-    Returns dict of {model_type: version} for trained models.
-    """
     logger.info("=" * 55)
     logger.info(f"Training: {symbol} | model: {model_type}")
     logger.info("=" * 55)
-
+    
     # Build features
     df = build_features(symbol, timeframe=TIMEFRAME)
     if df.empty:
-        logger.error(f"No features built for {symbol} — skipping")
+        logger.error(f"No features built for {symbol}")
         return {}
+    
+    # Validasi label balance
+    positive_labels = df['label'].sum()
+    if positive_labels < 10:
+        logger.warning(f"⚠️ {symbol}: only {positive_labels} positive labels — skipping")
+        return {}
+    
+    logger.info(f"  Label balance: {positive_labels/len(df):.1%} ({positive_labels}/{len(df)})")
 
     X_train, X_test, y_train, y_test, train_df, test_df = get_train_test_split(df)
 
